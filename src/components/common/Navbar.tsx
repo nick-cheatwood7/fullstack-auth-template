@@ -1,7 +1,21 @@
 import Image from "next/image";
 import Link from "next/link";
+import { api } from "../../utils/api";
 
 export default function Navbar() {
+  const { data, isError, isLoading } = api.auth.me.useQuery();
+
+  function renderAuthButtons() {
+    if (isLoading) {
+      return <div>Loading...</div>;
+    } else if (isError || (!isLoading && !data)) {
+      return <Link href="/login">Login</Link>;
+    }
+    if (data) {
+      return <div>Hello, {data.name}</div>;
+    }
+  }
+
   return (
     <header className="flex flex-row items-center justify-between bg-slate-800 px-6 py-4 text-white">
       <div>
@@ -15,7 +29,7 @@ export default function Navbar() {
           <Link href="/">Home</Link>
           <Link href="/about">About</Link>
           {/* Auth buttons */}
-          <Link href="/login">Login</Link>
+          {renderAuthButtons()}
         </ul>
       </div>
     </header>

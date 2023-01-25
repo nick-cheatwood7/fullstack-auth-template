@@ -15,6 +15,7 @@ const ironOptions: IronSessionOptions = {
     secure: __prod__,
     sameSite: "lax",
     path: "/",
+    maxAge: undefined, // expire with browser session
   },
 };
 

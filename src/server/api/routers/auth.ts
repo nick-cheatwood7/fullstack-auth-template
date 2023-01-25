@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import { TRPCError } from "@trpc/server";
 import argon2 from "argon2";
 import { loginSchema } from "../../../schema/auth.schema";
@@ -43,5 +44,21 @@ export const authRouter = createTRPCRouter({
     // Destroy session
     ctx.session.destroy();
     return true;
+  }),
+  me: protectedProcedure.query(async ({ ctx }) => {
+    const user = await ctx.prisma.user.findUnique({
+      where: {
+        id: ctx.session.user.id,
+      },
+    });
+    if (!user) {
+      throw new TRPCError({
+        code: "NOT_FOUND",
+        message: "Account not found.",
+      });
+    }
+    // @ts-ignore
+    delete user.hashedPassword;
+    return user;
   }),
 });
