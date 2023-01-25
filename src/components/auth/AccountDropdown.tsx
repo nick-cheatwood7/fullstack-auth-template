@@ -13,7 +13,7 @@ export default function AccountDropdown({ name }: { name: string }) {
 
   const handleLogout = async () => {
     try {
-      mutation.mutate();
+      await mutation.mutateAsync();
       await utils.auth.me.invalidate();
       window.location.href = "/login";
     } catch (error) {
