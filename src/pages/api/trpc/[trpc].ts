@@ -1,8 +1,8 @@
 import { createNextApiHandler } from "@trpc/server/adapters/next";
 import { env } from "../../../env/server.mjs";
-import { withSessionRoute } from "../../../lib/withSession";
 import { appRouter } from "../../../server/api/root";
 import { createTRPCContext } from "../../../server/api/trpc";
+import { withSessionRoute } from "../../../server/auth";
 
 // export API handler
 const trpcHandler = createNextApiHandler({

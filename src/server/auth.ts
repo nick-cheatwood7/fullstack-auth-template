@@ -1,21 +1,34 @@
-import { type GetServerSidePropsContext } from "next";
-import { unstable_getServerSession } from "next-auth";
+import type { IronSessionOptions } from "iron-session";
+import { withIronSessionApiRoute, withIronSessionSsr } from "iron-session/next";
+import type {
+  GetServerSidePropsContext,
+  GetServerSidePropsResult,
+  NextApiHandler,
+} from "next";
+import { __prod__ } from "../utils/constants";
 
-import { authOptions } from "../pages/api/auth/[...nextauth]";
-
-/**
- * Wrapper for unstable_getServerSession, used in trpc createContext and the
- * restricted API route
- *
- * Don't worry too much about the "unstable", it's safe to use but the syntax
- * may change in future versions
- *
- * @see https://next-auth.js.org/configuration/nextjs
- */
-
-export const getServerAuthSession = async (ctx: {
-  req: GetServerSidePropsContext["req"];
-  res: GetServerSidePropsContext["res"];
-}) => {
-  return await unstable_getServerSession(ctx.req, ctx.res, authOptions);
+const ironOptions: IronSessionOptions = {
+  cookieName: "qid",
+  password: "JLCMx+oVZUozQf1xeoBOxoLORH5Ajj5Iur76ycppknM=",
+  cookieOptions: {
+    httpOnly: true,
+    secure: __prod__,
+    sameSite: "lax",
+    path: "/",
+  },
 };
+
+export function withSessionRoute(handler: NextApiHandler) {
+  return withIronSessionApiRoute(handler, ironOptions);
+}
+
+// Theses types are compatible with InferGetStaticPropsType https://nextjs.org/docs/basic-features/data-fetching#typescript-use-getstaticprops
+export function withSessionSsr<
+  P extends { [key: string]: unknown } = { [key: string]: unknown }
+>(
+  handler: (
+    context: GetServerSidePropsContext
+  ) => GetServerSidePropsResult<P> | Promise<GetServerSidePropsResult<P>>
+) {
+  return withIronSessionSsr(handler, ironOptions);
+}
