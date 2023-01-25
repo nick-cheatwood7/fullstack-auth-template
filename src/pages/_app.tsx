@@ -13,7 +13,7 @@ const MyApp: AppType = ({ Component, pageProps: { ...pageProps } }) => {
       <div className="h-full w-screen bg-gray-900 font-sans text-sm">
         <Component {...pageProps} />
       </div>
-      <ReactQueryDevtools initialIsOpen={false} />
+      <ReactQueryDevtools initialIsOpen={false} position="bottom-right" />
     </div>
   );
 };
