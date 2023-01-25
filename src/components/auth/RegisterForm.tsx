@@ -3,20 +3,20 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import type { SubmitHandler } from "react-hook-form";
 import { useForm } from "react-hook-form";
-import type { LoginInput } from "../../schema/auth.schema";
-import { loginSchema } from "../../schema/auth.schema";
+import type { RegisterInput } from "../../schema/auth.schema";
+import { registerSchema } from "../../schema/auth.schema";
 
-export default function LoginForm() {
+export default function RegisterForm() {
   const router = useRouter();
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<LoginInput>({
-    resolver: zodResolver(loginSchema),
+  } = useForm<RegisterInput>({
+    resolver: zodResolver(registerSchema),
   });
 
-  const onSubmit: SubmitHandler<LoginInput> = async (data) => {
+  const onSubmit: SubmitHandler<RegisterInput> = async (data) => {
     try {
       console.log("Form data:", data);
       await router.push("/");
@@ -58,25 +58,27 @@ export default function LoginForm() {
           />
           <p className="input-field-error">{errors.password?.message}</p>
         </label>
-        {/* Remember me */}
-        <label className="flex w-full flex-row-reverse items-center justify-between text-gray-500">
-          Remember me for 30 days
+        {/* Confirm Password */}
+        <label className="text-gray-300">
+          Confirm Password
+          <span className="ml-0.5 text-sm font-medium text-red-500">*</span>
           <input
-            type="checkbox"
-            className="rounded-sm"
-            defaultChecked
-            {...register("rememberMe")}
+            type="password"
+            placeholder="********"
+            className="input-field"
+            {...register("confirmPassword")}
           />
+          <p className="input-field-error">{errors.confirmPassword?.message}</p>
         </label>
-        {/* Sign up */}
+        {/* Log In */}
         <div className="flex items-center justify-between">
-          <span className="text-gray-500">Don&apos;t have an account?</span>
-          <Link href="/signup" className="text-pink-500 underline">
-            Sign Up
+          <span className="text-gray-500">Already have an account?</span>
+          <Link href="/login" className="text-pink-500 underline">
+            Log In
           </Link>
         </div>
         <button type="submit" className="button-primary">
-          Log In
+          Sign Up
         </button>
       </form>
     </div>

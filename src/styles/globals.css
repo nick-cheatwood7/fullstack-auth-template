@@ -13,3 +13,7 @@
 .input-field-error {
   @apply mt-2 text-sm text-pink-600;
 }
+
+.button-primary {
+  @apply rounded-md bg-pink-500 px-3 py-2 font-medium text-white shadow-md hover:cursor-pointer hover:bg-pink-700;
+}

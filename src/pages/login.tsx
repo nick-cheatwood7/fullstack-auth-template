@@ -10,7 +10,7 @@ export default function Login() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className="flex h-full flex-1 flex-col items-center justify-center">
-        <h1 className="text-lg text-white">Log In</h1>
+        <h1 className="mb-4 text-lg text-white">Log In</h1>
         <LoginForm />
       </main>
     </>
