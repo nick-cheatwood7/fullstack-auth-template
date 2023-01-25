@@ -17,13 +17,14 @@
  *
  */
 import { type CreateNextContextOptions } from "@trpc/server/adapters/next";
-import { type Session } from "next-auth";
+import type { NextApiRequest, NextApiResponse } from "next";
 
-import { getServerAuthSession } from "../auth";
 import { prisma } from "../db";
 
 type CreateContextOptions = {
-  session: Session | null;
+  req: NextApiRequest;
+  res: NextApiResponse;
+  session: IronSession;
 };
 
 /**
@@ -38,6 +39,8 @@ type CreateContextOptions = {
 const createInnerTRPCContext = (opts: CreateContextOptions) => {
   return {
     session: opts.session,
+    req: opts.req,
+    res: opts.res,
     prisma,
   };
 };
@@ -47,14 +50,14 @@ const createInnerTRPCContext = (opts: CreateContextOptions) => {
  * process every request that goes through your tRPC endpoint
  * @link https://trpc.io/docs/context
  */
-export const createTRPCContext = async (opts: CreateNextContextOptions) => {
+export const createTRPCContext = (opts: CreateNextContextOptions) => {
   const { req, res } = opts;
-
-  // Get the session from the server using the unstable_getServerSession wrapper function
-  const session = await getServerAuthSession({ req, res });
+  const session = req.session;
 
   return createInnerTRPCContext({
     session,
+    req,
+    res,
   });
 };
 
@@ -65,6 +68,7 @@ export const createTRPCContext = async (opts: CreateNextContextOptions) => {
  * transformer
  */
 import { initTRPC, TRPCError } from "@trpc/server";
+import type { IronSession } from "iron-session";
 import superjson from "superjson";
 
 const t = initTRPC.context<typeof createTRPCContext>().create({

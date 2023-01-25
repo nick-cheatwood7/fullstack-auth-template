@@ -5,6 +5,7 @@ import type { SubmitHandler } from "react-hook-form";
 import { useForm } from "react-hook-form";
 import type { LoginInput } from "../../schema/auth.schema";
 import { loginSchema } from "../../schema/auth.schema";
+import { api } from "../../utils/api";
 
 export default function LoginForm() {
   const router = useRouter();
@@ -15,9 +16,11 @@ export default function LoginForm() {
   } = useForm<LoginInput>({
     resolver: zodResolver(loginSchema),
   });
+  const mutation = api.auth.login.useMutation();
 
   const onSubmit: SubmitHandler<LoginInput> = async (data) => {
     try {
+      await mutation.mutateAsync(data);
       console.log("Form data:", data);
       await router.push("/");
     } catch (error) {
