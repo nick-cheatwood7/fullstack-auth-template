@@ -13,6 +13,8 @@
     "db:gen": "npx prisma generate"
   },
   "dependencies": {
+    "@headlessui/react": "^1.7.7",
+    "@heroicons/react": "^2.0.13",
     "@hookform/resolvers": "^2.9.10",
     "@prisma/client": "^4.8.0",
     "@tanstack/react-query": "^4.20.0",

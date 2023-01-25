@@ -1,13 +1,32 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import { TRPCError } from "@trpc/server";
-import argon2 from "argon2";
-import { loginSchema } from "../../../schema/auth.schema";
+import * as argon2 from "argon2";
+import { loginSchema, registerSchema } from "../../../schema/auth.schema";
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 
 export const authRouter = createTRPCRouter({
+  register: publicProcedure
+    .input(registerSchema)
+    .mutation(async ({ input, ctx }) => {
+      // Create User in db
+      try {
+        const hashedPassword = await argon2.hash(input.password);
+        const user = await ctx.prisma.user.create({
+          data: {
+            username: input.username,
+            hashedPassword,
+          },
+        });
+        return user;
+      } catch (error) {
+        throw new TRPCError({
+          code: "CONFLICT",
+          message: "Account already exists.",
+        });
+      }
+    }),
   login: publicProcedure.input(loginSchema).mutation(async ({ input, ctx }) => {
     // Find user in db
-    console.log(input);
     const user = await ctx.prisma.user.findUnique({
       where: {
         username: input.username,
@@ -42,7 +61,7 @@ export const authRouter = createTRPCRouter({
   }),
   logout: protectedProcedure.mutation(({ ctx }) => {
     // Destroy session
-    ctx.session.destroy();
+    ctx.req.session.destroy();
     return true;
   }),
   me: protectedProcedure.query(async ({ ctx }) => {

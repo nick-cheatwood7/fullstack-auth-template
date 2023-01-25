@@ -1,6 +1,6 @@
 import Head from "next/head";
 
-export default function About() {
+export default function Unauthorized() {
   return (
     <>
       <Head>
@@ -9,8 +9,10 @@ export default function About() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <div className="flex h-full flex-1 flex-col items-center justify-center space-y-4 text-white">
-        <h1 className="text-4xl font-light">About page</h1>
-        <p className="text-gray-400">Welcome to the about page!</p>
+        <h1 className="text-4xl font-light">Oops!</h1>
+        <p className="text-gray-400">
+          You&apos;re not authorized to view this resource.
+        </p>
       </div>
     </>
   );

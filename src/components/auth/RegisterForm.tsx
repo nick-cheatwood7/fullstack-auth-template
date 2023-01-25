@@ -5,9 +5,11 @@ import type { SubmitHandler } from "react-hook-form";
 import { useForm } from "react-hook-form";
 import type { RegisterInput } from "../../schema/auth.schema";
 import { registerSchema } from "../../schema/auth.schema";
+import { api } from "../../utils/api";
 
 export default function RegisterForm() {
   const router = useRouter();
+  const mutation = api.auth.register.useMutation();
   const {
     register,
     handleSubmit,
@@ -19,6 +21,10 @@ export default function RegisterForm() {
   const onSubmit: SubmitHandler<RegisterInput> = async (data) => {
     try {
       console.log("Form data:", data);
+      const res = await mutation.mutateAsync({
+        ...data,
+      });
+      console.log(res);
       await router.push("/");
     } catch (error) {
       console.error(error);

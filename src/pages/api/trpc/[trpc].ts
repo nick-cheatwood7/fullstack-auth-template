@@ -20,3 +20,24 @@ const trpcHandler = createNextApiHandler({
 
 // Wrap with iron session
 export default withSessionRoute(trpcHandler);
+// export default withIronSessionApiRoute(trpcHandler, (req, res) => {
+//   // Infer max cookie age from request
+//   let rememberMe = false;
+//   if (req.url?.includes("/auth.login")) {
+//     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+//     // @ts-ignore
+//     const value = (req.body as unknown as Record<string, any>)["0"]?.["json"]?.[
+//       "rememberMe"
+//     ];
+//     if (typeof value === "boolean" && value === true) {
+//       rememberMe = value;
+//     }
+//   }
+//   const maxCookieAge = rememberMe ? 1000 * 60 * 60 * 24 * 14 : undefined;
+//   return {
+//     ...ironOptions,
+//     cookieOptions: {
+//       maxAge: maxCookieAge,
+//     },
+//   } satisfies IronSessionOptions;
+// });

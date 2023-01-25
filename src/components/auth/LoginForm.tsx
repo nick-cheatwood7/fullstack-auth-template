@@ -1,6 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
-import { useRouter } from "next/router";
 import type { SubmitHandler } from "react-hook-form";
 import { useForm } from "react-hook-form";
 import type { LoginInput } from "../../schema/auth.schema";
@@ -8,7 +7,7 @@ import { loginSchema } from "../../schema/auth.schema";
 import { api } from "../../utils/api";
 
 export default function LoginForm() {
-  const router = useRouter();
+  const utils = api.useContext();
   const {
     register,
     handleSubmit,
@@ -21,8 +20,9 @@ export default function LoginForm() {
   const onSubmit: SubmitHandler<LoginInput> = async (data) => {
     try {
       await mutation.mutateAsync(data);
+      await utils.auth.me.invalidate();
       console.log("Form data:", data);
-      await router.push("/");
+      window.location.href = "/";
     } catch (error) {
       console.error(error);
     }

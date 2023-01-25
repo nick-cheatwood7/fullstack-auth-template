@@ -7,7 +7,7 @@ import type {
 } from "next";
 import { __prod__ } from "../utils/constants";
 
-const ironOptions: IronSessionOptions = {
+export const ironOptions: IronSessionOptions = {
   cookieName: "qid",
   password: "JLCMx+oVZUozQf1xeoBOxoLORH5Ajj5Iur76ycppknM=",
   cookieOptions: {
